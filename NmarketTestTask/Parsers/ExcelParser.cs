@@ -103,9 +103,11 @@ namespace NmarketTestTask.Parsers
             //Если колчиество квартир и цен не совпадает, выводим предупреждение
             if (flatsNumbers.Count != flatsPrice.Count)
             {
-                Console.WriteLine($"В {array[0]} не совпадает количество значений цены и квартир. Ячеек цены {flatsPrice.Count}, ячеек квартир {flatsNumbers.Count}.", ConsoleColor.Red);
-                Console.WriteLine("Высока вероятность того, что данные заполняться некорректно или приложение завершиться с ошибкой.\n Нажмите ввод, чтобы продолжить.", ConsoleColor.Red);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"В {array[0]} не совпадает количество значений цены и квартир. Ячеек цены {flatsPrice.Count}, ячеек квартир {flatsNumbers.Count}.");
+                Console.WriteLine("Высока вероятность того, что данные заполняться некорректно или приложение завершиться с ошибкой.\nНажмите ввод, чтобы продолжить.");
                 Console.ReadLine();
+                Console.ResetColor();
             }
 
             //Заполняем список с квартирами
