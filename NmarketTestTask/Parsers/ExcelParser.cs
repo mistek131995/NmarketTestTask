@@ -4,6 +4,7 @@ using System.Linq;
 using ClosedXML.Excel;
 using NmarketTestTask.Models;
 using System.IO;
+using System.Threading;
 
 namespace NmarketTestTask.Parsers
 {
@@ -90,9 +91,21 @@ namespace NmarketTestTask.Parsers
             List<string> flatsNumbers = array.Where(x => x.Contains("№")).ToList();
             List<string> flatsPrice = array.Where(x => x.Contains("№") == false && x.Contains("Дом") == false).ToList();
 
-            Console.WriteLine();
+            if (flatsNumbers.Count != flatsPrice.Count)
+            {
+                Console.WriteLine($"В {array[0]} не совпадает количество значений цены и квартир. Ячеек цены {flatsPrice.Count}, ячеек квартир {flatsNumbers.Count}.");
+                Console.WriteLine("Высока вероятность того, что данные заполняться некорректно или приложение завершиться с ошибкой.\n Нажмите ввод, чтобы продолжить.");
+                Console.ReadLine();
+            }
 
-            
+            for(int i = 0; i < flatsNumbers.Count; i++)
+            {
+                flats.Add(new Flat()
+                {
+                    Number = flatsNumbers[i],
+                    Price = flatsPrice[i]
+                });
+            }
 
             return flats;
         }
