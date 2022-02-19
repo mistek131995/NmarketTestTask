@@ -26,13 +26,11 @@ namespace NmarketTestTask.Parsers
                     if (!houseArray[i][j].Contains("Дом"))
                         continue;
 
-                    House house = new House()
+                    houses.Add(new House()
                     {
                         Name = houseArray[i][j],
                         Flats = GetFlats(houseArray[i])
-                    };
-
-                    houses.Add(house);
+                    });
 
                 }
 
@@ -88,34 +86,13 @@ namespace NmarketTestTask.Parsers
         private List<Flat> GetFlats(List<string> array)
         {
             List<Flat> flats = new List<Flat>();
-            int addingCount = 0;
 
-            foreach(string value in array)
-            {
-                if (value.Contains("Дом"))
-                    continue;
+            List<string> flatsNumbers = array.Where(x => x.Contains("№")).ToList();
+            List<string> flatsPrice = array.Where(x => x.Contains("№") == false && x.Contains("Дом") == false).ToList();
 
-                if (value.Contains("№"))
-                {
-                    flats.Add(new Flat());
-                    flats[addingCount].Number = value;
-                    addingCount++;
-                }
+            Console.WriteLine();
 
-            }
-
-            addingCount = 0;
-
-            foreach (string value in array)
-            {
-                if (value.Contains("Дом") || value.Contains("№"))
-                    continue;
-
-
-                flats[addingCount].Price = value;
-                addingCount++;
-
-            }
+            
 
             return flats;
         }
