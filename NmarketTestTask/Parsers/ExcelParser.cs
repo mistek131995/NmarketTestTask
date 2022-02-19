@@ -84,20 +84,31 @@ namespace NmarketTestTask.Parsers
         }
     
 
+
+        /// <summary>
+        /// Метод принимает общий список и возвращает заполненный список квартир
+        /// </summary>
+        /// <param name="array">Общий список объектов</param>
+        /// <returns></returns>
         private List<Flat> GetFlats(List<string> array)
         {
+            //Общий список квартир для заполнения
             List<Flat> flats = new List<Flat>();
 
+            //Получаем номера квартир
             List<string> flatsNumbers = array.Where(x => x.Contains("№")).ToList();
+            //Получаем цены квартир
             List<string> flatsPrice = array.Where(x => x.Contains("№") == false && x.Contains("Дом") == false).ToList();
 
+            //Если колчиество квартир и цен не совпадает, выводим предупреждение
             if (flatsNumbers.Count != flatsPrice.Count)
             {
-                Console.WriteLine($"В {array[0]} не совпадает количество значений цены и квартир. Ячеек цены {flatsPrice.Count}, ячеек квартир {flatsNumbers.Count}.");
-                Console.WriteLine("Высока вероятность того, что данные заполняться некорректно или приложение завершиться с ошибкой.\n Нажмите ввод, чтобы продолжить.");
+                Console.WriteLine($"В {array[0]} не совпадает количество значений цены и квартир. Ячеек цены {flatsPrice.Count}, ячеек квартир {flatsNumbers.Count}.", ConsoleColor.Red);
+                Console.WriteLine("Высока вероятность того, что данные заполняться некорректно или приложение завершиться с ошибкой.\n Нажмите ввод, чтобы продолжить.", ConsoleColor.Red);
                 Console.ReadLine();
             }
 
+            //Заполняем список с квартирами
             for(int i = 0; i < flatsNumbers.Count; i++)
             {
                 flats.Add(new Flat()
