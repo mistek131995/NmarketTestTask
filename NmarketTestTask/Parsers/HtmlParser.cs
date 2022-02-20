@@ -9,9 +9,9 @@ namespace NmarketTestTask.Parsers
 {
     public class HtmlParser : IParser
     {
-        private string HouseAttributeName { get; set; }
-        private string PriceAttributeName { get; set; }
-        private string NumberAttributeName { get; set; }
+        private string HouseAttributeName;
+        private string PriceAttributeName;
+        private string NumberAttributeName;
 
         /// <summary>
         /// В класс передаем имена аттрибута класса столбцов
@@ -25,6 +25,7 @@ namespace NmarketTestTask.Parsers
             PriceAttributeName = priceAttributeValue;
             NumberAttributeName = numberAttributeValue;
         }
+
 
         /// <summary>
         /// Реальизация интерфейса, ну здесь и так все понятно...

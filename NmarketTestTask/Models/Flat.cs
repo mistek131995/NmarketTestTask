@@ -1,4 +1,8 @@
-﻿namespace NmarketTestTask.Models
+﻿using System;
+using System.Collections;
+using System.Linq;
+
+namespace NmarketTestTask.Models
 {
     public class Flat
     {

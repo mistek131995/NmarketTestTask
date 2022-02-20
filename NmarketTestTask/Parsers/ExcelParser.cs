@@ -4,7 +4,6 @@ using System.Linq;
 using ClosedXML.Excel;
 using NmarketTestTask.Models;
 using System.IO;
-using System.Threading;
 
 namespace NmarketTestTask.Parsers
 {
