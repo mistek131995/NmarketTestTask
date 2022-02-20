@@ -113,8 +113,6 @@ namespace NmarketTestTask.Parsers
             List<List<HtmlNode>> rowHouse = GetSortNode(nodes, columnCount, rowCount);
             List<List<HtmlNode>> houseRows = new List<List<HtmlNode>>();
 
-
-
             //Перебираем элементы вложенного списка rowHouse
             for (int i = 0; i < rowHouse.Count; i++)
             {
@@ -124,7 +122,6 @@ namespace NmarketTestTask.Parsers
                     houseRows.Add(rowHouse[i]);
                     continue;
                 }
-
 
                 //Если дом уже существует, объединяем значения и обновляем элемент списка
                 //Если элемент не найден, добавляем новый
@@ -140,8 +137,6 @@ namespace NmarketTestTask.Parsers
                 }
 
             }
-
-            
 
             return houseRows;
 
@@ -201,7 +196,6 @@ namespace NmarketTestTask.Parsers
                     indexExistHouse = house.IndexOf(house[j]);
                 }
             }
-
 
             return houseExist;
 
