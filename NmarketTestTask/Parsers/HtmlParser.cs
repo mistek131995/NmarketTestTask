@@ -2,11 +2,35 @@
 using System.Linq;
 using HtmlAgilityPack;
 using NmarketTestTask.Models;
+using System.IO;
+using System;
 
 namespace NmarketTestTask.Parsers
 {
     public class HtmlParser : IParser
     {
+        private string HouseAttributeName { get; set; }
+        private string PriceAttributeName { get; set; }
+        private string NumberAttributeName { get; set; }
+
+        /// <summary>
+        /// В класс передаем имена аттрибута класса столбцов
+        /// </summary>
+        /// <param name="houseAttributeName">Имя атрибута столбца дома</param>
+        /// <param name="priceAttributeValue">Имя атрибута столбца цены</param>
+        /// <param name="numberAttributeValue">Имя атрибута столбца номера квартиры</param>
+        public HtmlParser(string houseAttributeName = "house", string priceAttributeValue = "price", string numberAttributeValue = "number")
+        {
+            HouseAttributeName = houseAttributeName;
+            PriceAttributeName = priceAttributeValue;
+            NumberAttributeName = numberAttributeValue;
+        }
+
+        /// <summary>
+        /// Реальизация интерфейса, ну здесь и так все понятно...
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public IList<House> GetHouses(string path)
         {
             //Загружаем документ
@@ -20,6 +44,8 @@ namespace NmarketTestTask.Parsers
             HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes(".//td");
             //Массив с готовыми домами
             List<House> houses = JoinRowsToHouse(nodes, columnCount, rowCount);
+
+            Console.WriteLine($"Файл {Path.GetFileName(path)} успешно прочитан.");
 
             return houses;
         }
@@ -45,9 +71,9 @@ namespace NmarketTestTask.Parsers
                 //Список с квартирами
                 List<Flat> flats = new List<Flat>();
                 //Выбираем из элемента вложенного списка все элементы с атрибутом number
-                List<HtmlNode> flatNumber = houseRows[i].Where(x => x.Attributes["class"].Value == "number").ToList();
+                List<HtmlNode> flatNumber = houseRows[i].Where(x => x.Attributes["class"].Value == NumberAttributeName).ToList();
                 //Выбираем из элемента вложенного списка все элементы с атрибутом price
-                List<HtmlNode> flatPrice = houseRows[i].Where(x => x.Attributes["class"].Value == "price").ToList();
+                List<HtmlNode> flatPrice = houseRows[i].Where(x => x.Attributes["class"].Value == PriceAttributeName).ToList();
 
                 //Цикл заполняет список квартир
                 for (int j = 0; j < flatNumber.Count; j++)
@@ -140,7 +166,7 @@ namespace NmarketTestTask.Parsers
                 htmlNodes.Add(new List<HtmlNode>(nodes
                     .Skip(skipingStep)
                     .Take(columnCount)
-                    .Where(x=> x.Attributes["class"].Value == "house" || x.Attributes["class"].Value == "number" || x.Attributes["class"].Value == "price")
+                    .Where(x=> x.Attributes["class"].Value == HouseAttributeName || x.Attributes["class"].Value == NumberAttributeName || x.Attributes["class"].Value == PriceAttributeName)
                     ));
 
                 skipingStep += columnCount;
