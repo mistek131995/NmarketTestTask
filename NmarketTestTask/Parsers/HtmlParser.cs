@@ -25,18 +25,31 @@ namespace NmarketTestTask.Parsers
         }
 
 
+        /// <summary>
+        /// Собираем из вложенного списка данных дома
+        /// </summary>
+        /// <param name="nodes"></param>
+        /// <param name="columnCount"></param>
+        /// <param name="rowCount"></param>
+        /// <returns></returns>
         public List<House> JoinRowsToHouse(HtmlNodeCollection nodes, int columnCount, int rowCount)
         {
-            List<List<HtmlNode>> houseRows = GetRowsFromNodes(nodes, columnCount, rowCount);
-
+            //Вложенный список сгруппированый по домам
+            List<List<HtmlNode>> houseRows = GetRowsFromHouses(nodes, columnCount, rowCount);
+            //Список для заполнения
             List<House> houses = new List<House>();
+
 
             for (int i = 0; i < houseRows.Count; i++)
             {
+                //Список с квартирами
                 List<Flat> flats = new List<Flat>();
+                //Выбираем из элемента вложенного списка все элементы с атрибутом number
                 List<HtmlNode> flatNumber = houseRows[i].Where(x => x.Attributes["class"].Value == "number").ToList();
+                //Выбираем из элемента вложенного списка все элементы с атрибутом price
                 List<HtmlNode> flatPrice = houseRows[i].Where(x => x.Attributes["class"].Value == "price").ToList();
 
+                //Цикл заполняет список квартир
                 for (int j = 0; j < flatNumber.Count; j++)
                 {
                     flats.Add(new Flat()
@@ -46,6 +59,7 @@ namespace NmarketTestTask.Parsers
                     });
                 }
 
+                //Добавляем дома и список квартир к нему
                 houses.Add(new House
                 {
                     Name = houseRows[i][0].InnerText,
@@ -59,15 +73,22 @@ namespace NmarketTestTask.Parsers
 
 
 
-        private List<List<HtmlNode>> GetRowsFromNodes(HtmlNodeCollection nodes, int columnCount, int rowCount)
+        /// <summary>
+        /// Метод соединяет строки в дома
+        /// </summary>
+        /// <param name="nodes"></param>
+        /// <param name="columnCount"></param>
+        /// <param name="rowCount"></param>
+        /// <returns></returns>
+        private List<List<HtmlNode>> GetRowsFromHouses(HtmlNodeCollection nodes, int columnCount, int rowCount)
         {
 
             List<List<HtmlNode>> rowHouse = GetSortNode(nodes, columnCount, rowCount);
             List<List<HtmlNode>> houseRows = new List<List<HtmlNode>>();
 
 
-            
-            //Перебираем элементы вложенного списка House
+
+            //Перебираем элементы вложенного списка rowHouse
             for (int i = 0; i < rowHouse.Count; i++)
             {
                 //Если массив пустой, добавляем первый дом
