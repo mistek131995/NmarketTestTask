@@ -18,17 +18,17 @@ namespace NmarketTestTask.Parsers
             int rowCount = doc.DocumentNode.SelectNodes("//tr").Count - 1;
             //Получаем все элементы с тегом <td>
             HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes(".//td");
-            //Получаем дома построчно, как в таблице
-            List<List<HtmlNode>> houseRows = GetRowsFromNodes(nodes, columnCount, rowCount);
             //Массив с готовыми домами
-            List<House> houses = JoinRowsToHouse(houseRows);
+            List<House> houses = JoinRowsToHouse(nodes, columnCount, rowCount);
 
             return houses;
         }
 
 
-        public List<House> JoinRowsToHouse(List<List<HtmlNode>> houseRows)
+        public List<House> JoinRowsToHouse(HtmlNodeCollection nodes, int columnCount, int rowCount)
         {
+            List<List<HtmlNode>> houseRows = GetRowsFromNodes(nodes, columnCount, rowCount);
+
             List<House> houses = new List<House>();
 
             for (int i = 0; i < houseRows.Count; i++)
