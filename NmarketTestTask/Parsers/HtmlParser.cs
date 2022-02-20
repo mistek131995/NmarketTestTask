@@ -12,6 +12,8 @@ namespace NmarketTestTask.Parsers
         private string HouseAttributeName;
         private string PriceAttributeName;
         private string NumberAttributeName;
+        private int columnCount;
+        private int rowCount;
 
         /// <summary>
         /// В класс передаем имена аттрибута класса столбцов
@@ -27,6 +29,7 @@ namespace NmarketTestTask.Parsers
         }
 
 
+
         /// <summary>
         /// Реальизация интерфейса, ну здесь и так все понятно...
         /// </summary>
@@ -38,13 +41,13 @@ namespace NmarketTestTask.Parsers
             var doc = new HtmlDocument();
             doc.Load(path);
             //Количество строк в таблице
-            int columnCount = doc.DocumentNode.SelectNodes("//th").Count;
+            columnCount = doc.DocumentNode.SelectNodes("//th").Count;
             //Количество стобцов в таблице -1 (Потому что мы не пишем заголовки)
-            int rowCount = doc.DocumentNode.SelectNodes("//tr").Count - 1;
+            rowCount = doc.DocumentNode.SelectNodes("//tr").Count - 1;
             //Получаем все элементы с тегом <td>
             HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes(".//td");
             //Массив с готовыми домами
-            List<House> houses = JoinRowsToHouse(nodes, columnCount, rowCount);
+            List<House> houses = JoinRowsToHouse(nodes);
 
             Console.WriteLine($"Файл {Path.GetFileName(path)} успешно прочитан.");
 
@@ -59,13 +62,12 @@ namespace NmarketTestTask.Parsers
         /// <param name="columnCount"></param>
         /// <param name="rowCount"></param>
         /// <returns></returns>
-        public List<House> JoinRowsToHouse(HtmlNodeCollection nodes, int columnCount, int rowCount)
+        public List<House> JoinRowsToHouse(HtmlNodeCollection nodes)
         {
             //Вложенный список сгруппированый по домам
-            List<List<HtmlNode>> houseRows = GetRowsFromHouses(nodes, columnCount, rowCount);
+            List<List<HtmlNode>> houseRows = GetRowsFromHouses(nodes);
             //Список для заполнения
             List<House> houses = new List<House>();
-
 
             for (int i = 0; i < houseRows.Count; i++)
             {
@@ -107,10 +109,10 @@ namespace NmarketTestTask.Parsers
         /// <param name="columnCount"></param>
         /// <param name="rowCount"></param>
         /// <returns></returns>
-        private List<List<HtmlNode>> GetRowsFromHouses(HtmlNodeCollection nodes, int columnCount, int rowCount)
+        private List<List<HtmlNode>> GetRowsFromHouses(HtmlNodeCollection nodes)
         {
 
-            List<List<HtmlNode>> rowHouse = GetSortNode(nodes, columnCount, rowCount);
+            List<List<HtmlNode>> rowHouse = GetSortNode(nodes);
             List<List<HtmlNode>> houseRows = new List<List<HtmlNode>>();
 
             //Перебираем элементы вложенного списка rowHouse
@@ -149,7 +151,7 @@ namespace NmarketTestTask.Parsers
         /// <param name="nodes">Массив с нодами</param>
         /// <param name="columnCount">Количество столбцов</param>
         /// <param name="rowCount">Количество строк</param>
-        private List<List<HtmlNode>> GetSortNode(HtmlNodeCollection nodes, int columnCount, int rowCount)
+        private List<List<HtmlNode>> GetSortNode(HtmlNodeCollection nodes)
         {
             //Массив где храняться ноды построчно
             List<List<HtmlNode>> htmlNodes = new List<List<HtmlNode>>();
