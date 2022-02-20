@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Xml.Serialization;
 using NmarketTestTask.Models;
@@ -18,6 +19,8 @@ namespace NmarketTestTask
             ParseAllFiles(new ExcelParser(), @"Files\Excel");
             ParseAllFiles(new HtmlParser(), @"Files\Html");
 
+
+            Process.Start("explorer.exe", "Result");
             Console.ReadLine();
         }
 
